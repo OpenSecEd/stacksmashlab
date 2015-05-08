@@ -1,0 +1,119 @@
+\title{Smashing the Stack For Fun and Learning}
+\subtitle{A lab on arbitrary code execution in a locked down system}
+
+\author{%
+  Daniel Bosk
+}
+\institute{%
+  Department of Information and Communication Systems,\\
+  Mid Sweden University, SE-851\,70 Sundsvall
+}
+
+\maketitle
+
+
+\section{Introduction}
+\label{sec:intro}
+Buffer overruns of different kinds are common vulnerabilities in software.
+Examples vary from being able to break the DRM of a Nintendo Wii console 
+\cite{twilighthack} to reading the memory of a running OpenSSL implementation 
+\cite{heartbleed}.
+
+How this really works is that the software mistakenly do not check the 
+boundaries of buffers.
+This might be due to incorrect assumptions by developers, the system being 
+comlpex, or simply human error.
+
+\subsection{Aim}
+\label{sec:aim}
+The aims of this assignment is to look into buffer overrun vulnerabilities.
+The intended learning outcomes are as followin, after completion of this 
+assignment you should be able to:
+\begin{itemize}
+  \input{aims.tex}
+\end{itemize}
+
+The next section covers what you must read before you understand this 
+assignment and how to do the work.
+Section \ref{sec:tasks} covers the work to be done, i.e.~how you should learn 
+this.
+Section \ref{sec:exam} covers how it will be examined, i.e.~how you show that 
+you have fulfilled the intended learning outcomes given above.
+
+
+\section{Theory}
+\label{sec:reading}
+\input{literature.tex}
+
+
+\section{Assignment}
+\label{sec:tasks}
+This section covers the work to be done and the next section covers how it will 
+be examined, and what to be done to pass it.
+
+This assignment will use the scenario of a buffer overrun bug found in Sun's 
+Solaris 8 and 9 \cite{passwdbug}.
+The scenario is a vulnerability in the passwd(1) program which allows for 
+arbitrary code execution.
+We will use a much simplified version of the passwd(1) utility, the source code 
+can be found in Sect.~\ref{app:passwdsrc} in the appendix.
+
+The first part of the lab concerns exploiting a buffer overrun vulnerability in 
+this program to execute a new shell.
+This shell will, due to the nature of the passwd(1) utility, have root 
+priviledges, since it can execute the setuid(2) system call to change the 
+effective user ID to that of root.
+
+This first part of the assignment will be solved together during a full-class 
+hackathon in the computer lab.
+There will be a projector with the code for all to see, then we will rotate who 
+will be by the keyboard writing what the rest of the class is saying.
+This way we will discuss together and write the code together, everyone will 
+thus participate in the process.
+
+The second part of the assignment is to dicsuss the consequences of this, among 
+other things we will discuss the following questions:
+\begin{itemize}
+  \item How can we possibly detect if this attack has occured somewhere?
+  \item How can we protect ourselves from vulnerabilities such as these?
+\end{itemize}
+
+
+\section{Examination}
+\label{sec:exam}
+To pass this assignment you must first actively participate in the hackathon 
+lab session.
+You must also actively contribute to the post-coding discussions.
+
+If you cannot participate in the lab session you have to solve the lab 
+yourself, then orally present your solution during one of the lab sessions 
+after the course-end.
+
+
+\subsubsection*{Acknowledgements}
+
+This work is licensed under the Creative Commons Attribution-ShareAlike 3.0 
+Unported license.
+To view a copy of this license, visit 
+\url{http://creativecommons.org/licenses/by-sa/3.0/}.
+Its original source code can be found in URL 
+\url{https://github.com/dbosk/stacksmashlab/}.
+
+
+\printbibliography
+
+
+\appendix
+\section{The simple passwd.c program}
+\label{app:passwdsrc}
+The following program will be used for experimenting with buffer overruns.
+The source code is available in a file with the source code of this document, 
+that source also contains a Makefile to build it properly (with disabled stack 
+protection etc.).
+See the repository on URL
+\begin{center}
+  \url{https://github.com/dbosk/stacksmashlab/}.
+\end{center}
+
+\lstinputlisting[language=C,firstline=32]{passwd.c}
+
