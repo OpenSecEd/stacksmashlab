@@ -89,16 +89,18 @@ write_passwd( const char *passwd )
 }
 
 int
-main( int argc, char **argv )
+main( void )
 {
-	char passwd[256];
-	char newpass[256];
+	char passwd[128] = { 0 };
+	char newpass[128] = { 0 };
 
 	printf( "Enter old password: " );
 	scanf( "%s", passwd );
 
 	if ( test_passwd( passwd ) < 0 ) {
-		errx( -1, "Old password is wrong" );
+		//errx( -1, "Old password is wrong" );
+		printf( "Old password is wrong" );
+		return -1;
 	}
 
 	printf( "Enter new password: " );

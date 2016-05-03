@@ -9,18 +9,42 @@ all: stacksmash.pdf passwd
 
 stacksmash.pdf: ${FILES} llncs
 
-ifeq (${MAKE},gmake)
-CFLAGS= 	-Wall -g -fno-stack-protector -z execstack
-else
-CFLAGS= 	-Wall -g -D_GNU_SOURCE -fno-stack-protector -z execstack
+CFLAGS= 	-Wall -g
+LDFLAGS= 	-fno-stack-protector -z execstack
+ifneq (${MAKE},gmake)
+CFLAGS+= 	-D_GNU_SOURCE
 endif
 LDLIBS= 	-lcrypt
 
 passwd: passwd.o
+exploit: exploit.o
+payload: exploit
+	./exploit > $@
+
+shellcode.o: shellcode.s
+shellcode: shellcode.o
+	ld $^ -o $@
+
+testshell: testshell.o
+
+.PHONY: run_exploit
+run_exploit: passwd exploit
+	echo "0" | sudo tee /proc/sys/kernel/randomize_va_space
+	touch master.passwd
+	-./exploit | ./passwd
+	echo "2" | sudo tee /proc/sys/kernel/randomize_va_space
+
+.PHONY: debug_exploit
+debug_exploit: passwd payload
+	touch master.passwd
+	gdb ./passwd
+
 
 .PHONY: clean
 clean:
-	${RM} passwd.o passwd
+	${RM} passwd.o passwd master.passwd
+	${RM} exploit.o exploit payload
+	${RM} testshell.o testshell
 
 
 INCLUDE_MAKEFILES=makefiles
