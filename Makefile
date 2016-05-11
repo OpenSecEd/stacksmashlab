@@ -31,12 +31,16 @@ testshell: testshell.o
 run_exploit: passwd exploit
 	echo "0" | sudo tee /proc/sys/kernel/randomize_va_space
 	touch master.passwd
+	sudo chown root:root ./passwd
+	sudo chmod +s ./passwd
 	-./exploit | ./passwd
 	echo "2" | sudo tee /proc/sys/kernel/randomize_va_space
 
 .PHONY: debug_exploit
 debug_exploit: passwd payload
 	touch master.passwd
+	sudo chown root:root ./passwd
+	sudo chmod +s ./passwd
 	gdb ./passwd
 
 
