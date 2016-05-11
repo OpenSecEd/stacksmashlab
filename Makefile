@@ -48,6 +48,7 @@ debug_exploit: passwd payload
 clean:
 	${RM} passwd.o passwd master.passwd
 	${RM} exploit.o exploit payload
+	${RM} shellcode.o shellcode
 	${RM} testshell.o testshell
 
 
