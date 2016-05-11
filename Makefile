@@ -39,8 +39,7 @@ run_exploit: passwd exploit
 .PHONY: debug_exploit
 debug_exploit: passwd payload
 	touch master.passwd
-	sudo chown root:root ./passwd
-	sudo chmod +s ./passwd
+	./passwd
 	gdb ./passwd
 
 
