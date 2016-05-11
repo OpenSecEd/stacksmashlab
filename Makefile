@@ -9,8 +9,8 @@ all: stacksmash.pdf passwd
 
 stacksmash.pdf: ${FILES} llncs
 
-CFLAGS= 	-Wall -g
-LDFLAGS= 	-fno-stack-protector -z execstack
+CFLAGS= 	-Wall -g -fno-stack-protector
+LDFLAGS= 	-z execstack
 ifneq (${MAKE},gmake)
 CFLAGS+= 	-D_GNU_SOURCE
 endif
