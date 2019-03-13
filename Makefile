@@ -7,7 +7,7 @@ USE_BIBLATEX= 	yes
 .PHONY: all
 all: stacksmash.pdf passwd
 
-stacksmash.pdf: ${FILES} llncs
+stacksmash.pdf: ${FILES}
 
 CFLAGS= 	-Wall -g -fno-stack-protector
 LDFLAGS= 	-z execstack
